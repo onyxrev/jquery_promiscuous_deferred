@@ -35,4 +35,43 @@ Yay.
 
 This library basically creates counterpart methods to the Deferred methods that copy all the methods from promise to promise except for the Deferred methods themselves.
 
+As long as you chain with the fooPromiscuous methods you'll maintain your decorators:
+
+```Javascript
+var getVeggies = function(){
+    return $.Deferred.promiscuous($.get("huge_vegetables")).
+        thenPromiscuous(function(veggies){
+            return digest(veggies);
+        }).
+        donePromiscuous(function(usedToBeVeggies){
+            $("body").append(digestedVeggies);
+        });
+};
+
+var request = getVeggies().alwaysPromiscuous(stopSpinner).failPromiscuous(terribleError);
+
+if (noLikeVeggies)
+    request.abort();
+```
+
 Is this code a good idea?  I don't know yet.  It's experimental.
+
+What Methods You Got?
+---------------------
+
+We got:
+
+* alwaysPromiscuous
+* donePromiscuous
+* failPromiscuous
+* pipePromiscuous
+* rejectPromiscuous
+* rejectWithPromiscuous
+* resolvePromiscuous
+* resolveWithPromiscuous
+* thenPromiscuous
+
+I'm Tired of Typing Promiscuous
+-------------------------------
+
+Me too!  Do you have a better name?  TELL ME.
