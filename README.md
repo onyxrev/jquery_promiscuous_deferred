@@ -14,7 +14,7 @@ if (userChangedSomethingOhCrapStop)
 *** EXPLODE ***
 ```
 
-... only to remember that jQuery doesn't copy the AJAX methods when you chain the AJAX deferred?
+... only to remember that jQuery ([on purpose, I guess](http://bugs.jquery.com/ticket/14104)) doesn't copy the AJAX methods when you chain the AJAX deferred?
 
 BLAH.
 
