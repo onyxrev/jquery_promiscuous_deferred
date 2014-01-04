@@ -21,7 +21,7 @@ BLAH.
 Well this stupid code lets you do this:
 
 ```Javascript
-var deferred = $.Deferred.promiscuous($.get("small_balls.txt"), "abort").then(function(ballsString){
+var deferred = $.Deferred.makePromiscuous($.get("small_balls.txt"), "abort").then(function(ballsString){
     return ballsString.toUpperCase();
 });
 
@@ -37,7 +37,7 @@ This library basically wraps the jQuery Deferred methods and copies the properti
 
 ```Javascript
 var getVeggies = function(){
-    return $.Deferred.promiscuous($.get("huge_vegetables"), ["abort", "getAllResponseHeaders"]).
+    return $.Deferred.makePromiscuous($.get("huge_vegetables"), ["abort", "getAllResponseHeaders"]).
         then(function(veggies){
             return digest(veggies);
         }).
@@ -81,4 +81,4 @@ We got:
 * resolveWith
 * then
 
-And of course if you don't call $.Deferred.promiscuous on the promise it isn't affected at all.
+And of course if you don't call $.Deferred.makePromiscuous on the promise it isn't affected at all.

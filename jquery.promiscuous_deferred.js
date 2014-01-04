@@ -48,7 +48,7 @@
             return methods;
         };
 
-    jQuery.Deferred.promiscuous = function(promise, propertiesToCopy){
+    jQuery.Deferred.makePromiscuous = function(promise, propertiesToCopy){
         jQuery.each(methodsToExtend, function(i, methodName){
             var originalMethod = promise[methodName];
 
@@ -64,7 +64,7 @@
 
                 // make the new promise also promiscuous because
                 // that's how promiscuous things roll
-                return jQuery.Deferred.promiscuous(newPromise);
+                return jQuery.Deferred.makePromiscuous(newPromise);
             };
         });
 
