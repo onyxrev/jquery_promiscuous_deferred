@@ -1,4 +1,5 @@
 // Promiscuous Deferreds
+// https://github.com/onyxrev/jquery_promiscuous_deferred
 //
 // Copyright (c) 2014 Dan Connor
 
