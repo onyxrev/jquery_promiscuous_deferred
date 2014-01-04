@@ -21,7 +21,7 @@ BLAH.
 Well this stupid code lets you do this:
 
 ```Javascript
-var deferred = $.Deferred.promiscuous($.get("small_balls.txt")).thenPromiscous(function(ballsString){
+var deferred = $.Deferred.promiscuous($.get("small_balls.txt"), "abort").then(function(ballsString){
     return ballsString.toUpperCase();
 });
 
@@ -31,47 +31,54 @@ if (userChangedSomethingOhCrapStop)
 *** oh, okay I'll stop that for you ***
 ```
 
-Yay.
+Yay.  You specify the properties you want to retain throughout the chaining and the "promiscuous" Deferred copies those properties across each step.
 
-This library basically creates counterpart methods to the Deferred methods that copy all the methods from promise to promise except for the Deferred methods themselves.
-
-As long as you chain with the fooPromiscuous methods you'll maintain your decorators:
+This library basically wraps the jQuery Deferred methods and copies the properties from promise to promise along the way.
 
 ```Javascript
 var getVeggies = function(){
-    return $.Deferred.promiscuous($.get("huge_vegetables")).
-        thenPromiscuous(function(veggies){
+    return $.Deferred.promiscuous($.get("huge_vegetables"), ["abort", "getAllResponseHeaders"]).
+        then(function(veggies){
             return digest(veggies);
         }).
-        donePromiscuous(function(usedToBeVeggies){
+        done(function(usedToBeVeggies){
             $("body").append(digestedVeggies);
         });
 };
 
-var request = getVeggies().alwaysPromiscuous(stopSpinner).failPromiscuous(terribleError);
+var request = getVeggies().always(stopSpinner).fail(terribleError);
 
 if (noLikeVeggies)
     request.abort();
+
+> request.getAllResponseHeaders();
+"X-Pingback: http://api.jquery.com/xmlrpc.php
+Date: Thu, 02 Jan 2014 07:10:31 GMT
+Content-Encoding: gzip
+Server: nginx/1.4.4
+X-Powered-By: PHP/5.3.27-1~dotdeb.0
+Transfer-Encoding: chunked
+Content-Type: text/html; charset=UTF-8
+Connection: keep-alive
+Link: <http://api.jquery.com/?p=311>; rel=shortlink
+"
 ```
 
 Is this code a good idea?  I don't know yet.  It's experimental.
 
-What Methods You Got?
+What Methods Do You Patch?
 ---------------------
 
 We got:
 
-* alwaysPromiscuous
-* donePromiscuous
-* failPromiscuous
-* pipePromiscuous
-* rejectPromiscuous
-* rejectWithPromiscuous
-* resolvePromiscuous
-* resolveWithPromiscuous
-* thenPromiscuous
+* always
+* done
+* fail
+* pipe
+* reject
+* rejectWith
+* resolve
+* resolveWith
+* then
 
-I'm Tired of Typing Promiscuous
--------------------------------
-
-Me too!  Do you have a better name?  TELL ME.
+And of course if you don't call $.Deferred.promiscuous on the promise it isn't affected at all.

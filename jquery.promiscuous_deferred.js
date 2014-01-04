@@ -34,32 +34,33 @@
             "resolveWith",
             "then"
         ],
-        extractMethods = function(promise){
-            var methods = {};
-            jQuery.each(promise, function(propName, property){
-                // extract the property if it's a method and if it
-                // isn't one of our extended methods
-                if (jQuery.isFunction(property) && methodsToExtend.indexOf(propName) === -1)
+        extractProperties = function(promise, propertiesToCopy){
+            var methods = {}, property;
+
+            jQuery.each(propertiesToCopy, function(i, propName){
+                property = promise[propName];
+
+                // extract the property if isn't one of our methods
+                if (methodsToExtend.indexOf(propName) === -1)
                     methods[propName] = property;
             });
 
             return methods;
         };
 
-    jQuery.Deferred.promiscuous = function(promise){
+    jQuery.Deferred.promiscuous = function(promise, propertiesToCopy){
         jQuery.each(methodsToExtend, function(i, methodName){
-            // postfix our counterpart methods with "Promiscuous"
-            newMethodName = [methodName, "Promiscuous"].join("");
+            var originalMethod = promise[methodName];
 
-            promise[newMethodName] = promise[newMethodName] || function(/* ... */){
-                // let's get the decorator methods
-                var methods    = extractMethods(this);
+            promise[methodName] = function(/* ... */){
+                // let's get the properties
+                var copiedProperties = extractProperties(this, jQuery.makeArray(propertiesToCopy));
 
                 // run our method as usual
-                var newPromise = this[methodName].apply(this, arguments);
+                var newPromise = originalMethod.apply(this, arguments);
 
                 // merge on the decorators
-                jQuery.extend(newPromise, methods);
+                jQuery.extend(newPromise, copiedProperties);
 
                 // make the new promise also promiscuous because
                 // that's how promiscuous things roll
